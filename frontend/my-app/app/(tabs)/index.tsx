@@ -5,8 +5,14 @@ import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import React from 'react';
+import LoginScreen from '../../components/LoginScreen'; // ✅ Correct path
 
-export default function HomeScreen() {
+export default function Index() {
+    return <LoginScreen />;
+}
+
+/*export default function HomeScreen() {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -72,4 +78,4 @@ const styles = StyleSheet.create({
     left: 0,
     position: 'absolute',
   },
-});
+});*/
