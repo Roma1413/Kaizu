@@ -5,12 +5,24 @@ import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import React from 'react';
-import LoginScreen from '../../components/LoginScreen'; // ✅ Correct path
+/*import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import LoginScreen from '@/components/LoginScreen';
+import SignUpScreen from '@/components/SignUpScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function Index() {
-    return <LoginScreen />;
-}
+    return (
+
+            <Stack.Navigator initialRouteName="Login">
+                <Stack.Screen name="Login" component={LoginScreen} />
+                <Stack.Screen name="SignUp" component={SignUpScreen} />
+            </Stack.Navigator>
+
+    );
+}*/
 
 /*export default function HomeScreen() {
   return (

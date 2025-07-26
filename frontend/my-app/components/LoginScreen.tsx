@@ -6,15 +6,21 @@ import {
     TouchableOpacity,
     StyleSheet,
     SafeAreaView,
-    Image
-} from 'react-native';
+
+}
+from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useRouter } from 'expo-router';
+
+
 
 const LoginScreen = () => {
+    const router = useRouter();
+
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.logo}>SelfSpark</Text>
-            <Text style={styles.subtitle}>Embrace your strengths. Build your future.</Text>
+            <Text style={styles.logo}>Kaizu</Text>
+            <Text style={styles.subtitle}>“Better habits with better partners.”</Text>
 
             <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#888" />
             <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#888" secureTextEntry />
@@ -23,7 +29,7 @@ const LoginScreen = () => {
                 <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("/signup")}>
                 <Text style={styles.signUpText}>Sign Up</Text>
             </TouchableOpacity>
 
