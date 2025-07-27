@@ -5,7 +5,7 @@ import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-/*import React from 'react';
+import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LoginScreen from '@/components/LoginScreen';
@@ -22,7 +22,7 @@ export default function Index() {
             </Stack.Navigator>
 
     );
-}*/
+}
 
 /*export default function HomeScreen() {
   return (

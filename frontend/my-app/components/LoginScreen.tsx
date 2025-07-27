@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
     View,
     Text,
@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     StyleSheet,
     SafeAreaView,
+    Image
 
 }
 from 'react-native';
@@ -16,16 +17,55 @@ import { useRouter } from 'expo-router';
 
 const LoginScreen = () => {
     const router = useRouter();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+
+    const handleLogin = async () => {
+        try {
+            const res = await fetch('http://localhost:8000/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+            });
+            const data = await res.json();
+            if (res.ok) {
+                console.log('Login successful:', data);
+                router.push('/'); // navigate to Home screen
+            } else {
+                alert(data.detail || 'Login failed');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Error connecting to backend');
+        }
+    };
+
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.logo}>Kaizu</Text>
+            <Image style={styles.logoImage} source={require('@/assets/images/app-image.png')} />
+
+
             <Text style={styles.subtitle}>“Better habits with better partners.”</Text>
 
-            <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#888" />
-            <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#888" secureTextEntry />
+            <TextInput
+                style={styles.input}
+                placeholder="Email"
+                placeholderTextColor="#888"
+                value={email}
+                onChangeText={setEmail}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Password"
+                placeholderTextColor="#888"
+                secureTextEntry
+                value={password}
+                onChangeText={setPassword}
+            />
 
-            <TouchableOpacity style={styles.loginButton}>
+            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
                 <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
 
@@ -53,7 +93,8 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         justifyContent: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: 'FF6FA4',
+
         alignItems: 'center',
     },
     logo: {
@@ -110,6 +151,13 @@ const styles = StyleSheet.create({
         padding: 12,
         borderRadius: 50,
         marginHorizontal: 10,
+    },
+    logoImage: {
+        width: 100,
+        height:100,
+        marginBottom: 10,
+        borderRadius: 50,
+        resizeMode: 'contain',
     },
 });
 

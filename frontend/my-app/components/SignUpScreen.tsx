@@ -1,32 +1,88 @@
-
-
-import React from 'react';
+import React, { useState } from 'react';
 import {
-
     Text,
     TextInput,
     TouchableOpacity,
     StyleSheet,
     SafeAreaView
 } from 'react-native';
+import { useRouter } from 'expo-router';
 
-const SignUpScreen =()=> {
+const SignUpScreen = () => {
+    const router = useRouter();
+
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const handleSignUp = async () => {
+        if (password !== confirmPassword) {
+            alert("Passwords do not match");
+            return;
+        }
+
+        try {
+            const res = await fetch('http://192.168.1.3:8000/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password }),
+            });
+            const data = await res.json();
+            if (res.ok) {
+                console.log('Sign up successful:', data);
+                router.push('/login');
+            } else {
+                alert(data.detail || 'Sign up failed');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Error connecting to backend');
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.logo}>SelfSpark</Text>
             <Text style={styles.subtitle}>Join the journey. Build your best self.</Text>
 
-            <TextInput style={styles.input} placeholder="Full Name" placeholderTextColor="#888" />
-            <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#888" />
-            <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#888" secureTextEntry />
-            <TextInput style={styles.input} placeholder="Confirm Password" placeholderTextColor="#888" secureTextEntry />
+            <TextInput
+                style={styles.input}
+                placeholder="Full Name"
+                placeholderTextColor="#888"
+                value={name}
+                onChangeText={setName}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Email"
+                placeholderTextColor="#888"
+                value={email}
+                onChangeText={setEmail}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Password"
+                placeholderTextColor="#888"
+                secureTextEntry
+                value={password}
+                onChangeText={setPassword}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Confirm Password"
+                placeholderTextColor="#888"
+                secureTextEntry
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+            />
 
-            <TouchableOpacity style={styles.signUpButton}>
+            <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
                 <Text style={styles.signUpButtonText}>Sign Up</Text>
             </TouchableOpacity>
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -72,4 +128,5 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 });
+
 export default SignUpScreen;
