@@ -13,17 +13,22 @@ from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useRouter } from 'expo-router';
 
+import * as WebBrowser from 'expo-web-browser';
+import { useAuth } from '@/contexts/AuthContext';
+WebBrowser.maybeCompleteAuthSession();
 
 
 const LoginScreen = () => {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { login } = useAuth();
+
 
 
     const handleLogin = async () => {
         try {
-            const res = await fetch('http://localhost:8000/login', {
+            const res = await fetch('http://192.168.1.3:8000/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
@@ -31,7 +36,8 @@ const LoginScreen = () => {
             const data = await res.json();
             if (res.ok) {
                 console.log('Login successful:', data);
-                router.push('/'); // navigate to Home screen
+                login(data); // Store user data
+                router.push('/home'); // Navigate to home
             } else {
                 alert(data.detail || 'Login failed');
             }

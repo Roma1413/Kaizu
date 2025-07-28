@@ -1,4 +1,3 @@
-import { useRouter } from 'expo-router';
+import HomeScreen from '@/components/HomeScreen';
 
-const router = useRouter();
-router.push('/home'); // Navigate to home screen
+export default HomeScreen;

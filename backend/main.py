@@ -33,7 +33,7 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
 
 @app.post("/register")
 def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    existing_user = db.query(models.User).filter(models.User.email == user.email).first()
+    existing_user = db.query(models.User).filter(user.email == models.User.email).first()
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
 
@@ -48,3 +48,4 @@ def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
 
     return {"message": "User registered successfully", "user_id": new_user.id}
+    

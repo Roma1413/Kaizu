@@ -8,13 +8,16 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
+
 const SignUpScreen = () => {
     const router = useRouter();
+
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+
 
     const handleSignUp = async () => {
         if (password !== confirmPassword) {
@@ -41,9 +44,10 @@ const SignUpScreen = () => {
         }
     };
 
+
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.logo}>SelfSpark</Text>
+            <Text style={styles.logo}>Kaizu</Text>
             <Text style={styles.subtitle}>Join the journey. Build your best self.</Text>
 
             <TextInput
@@ -80,6 +84,9 @@ const SignUpScreen = () => {
             <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
                 <Text style={styles.signUpButtonText}>Sign Up</Text>
             </TouchableOpacity>
+            <TouchableOpacity style={styles.logintext} onPress={()=>router.push("/login")}>
+                <Text style={styles.logintext}>Log in</Text>
+            </TouchableOpacity>
         </SafeAreaView>
     );
 };
@@ -113,6 +120,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         marginBottom: 15,
         fontSize: 16,
+    },
+    logintext: {
+        color: '#00aaff',
+        fontSize: 16,
+        marginBottom: 20,
+
+
+
     },
     signUpButton: {
         width: '100%',

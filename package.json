@@ -1,7 +1,9 @@
 {
   "dependencies": {
     "expo": "^53.0.20",
-    "react-native-vector-icons": "^10.3.0"
+    "react-native-vector-icons": "^10.3.0",
+    "expo-auth-session": "~6.2.1",
+    "expo-web-browser": "~14.2.0"
   },
   "devDependencies": {
     "typescript": "~5.8.3",
