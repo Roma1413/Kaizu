@@ -4,24 +4,24 @@ import {
     TextInput,
     TouchableOpacity,
     StyleSheet,
-    SafeAreaView
+    SafeAreaView,
+    Image,
+    Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-
+import { LinearGradient } from 'expo-linear-gradient';
 
 const SignUpScreen = () => {
     const router = useRouter();
-
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-
     const handleSignUp = async () => {
         if (password !== confirmPassword) {
-            alert("Passwords do not match");
+            Alert.alert("Error", "Passwords do not match");
             return;
         }
 
@@ -36,80 +36,93 @@ const SignUpScreen = () => {
                 console.log('Sign up successful:', data);
                 router.push('/login');
             } else {
-                alert(data.detail || 'Sign up failed');
+                Alert.alert("Sign up failed", data.detail || 'Please try again');
             }
         } catch (error) {
             console.error(error);
-            alert('Error connecting to backend');
+            Alert.alert('Error', 'Could not connect to backend');
         }
     };
 
-
     return (
-        <SafeAreaView style={styles.container}>
-            <Text style={styles.logo}>Kaizu</Text>
-            <Text style={styles.subtitle}>Join the journey. Build your best self.</Text>
+        <LinearGradient colors={['#FFDEE9', '#B5FFFC']} style={styles.gradient}>
+            <SafeAreaView style={styles.container}>
+                <Image
+                    source={require('@/assets/images/app-image.png')}
+                    style={styles.logoImage}
+                />
+                <Text style={styles.subtitle}>“Join the journey. Build your best self.”</Text>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Full Name"
-                placeholderTextColor="#888"
-                value={name}
-                onChangeText={setName}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Email"
-                placeholderTextColor="#888"
-                value={email}
-                onChangeText={setEmail}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                placeholderTextColor="#888"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Confirm Password"
-                placeholderTextColor="#888"
-                secureTextEntry
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-            />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Full Name"
+                    placeholderTextColor="#888"
+                    value={name}
+                    onChangeText={setName}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Email"
+                    placeholderTextColor="#888"
+                    value={email}
+                    onChangeText={setEmail}
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    placeholderTextColor="#888"
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Confirm Password"
+                    placeholderTextColor="#888"
+                    secureTextEntry
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
+                />
 
-            <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
-                <Text style={styles.signUpButtonText}>Sign Up</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.logintext} onPress={()=>router.push("/login")}>
-                <Text style={styles.logintext}>Log in</Text>
-            </TouchableOpacity>
-        </SafeAreaView>
+                <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
+                    <Text style={styles.signUpButtonText}>Sign Up</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => router.push("/login")}>
+                    <Text style={styles.loginText}>Already have an account? Log In</Text>
+                </TouchableOpacity>
+            </SafeAreaView>
+        </LinearGradient>
     );
 };
 
 const styles = StyleSheet.create({
+    gradient: {
+        flex: 1,
+    },
     container: {
         flex: 1,
         padding: 20,
         justifyContent: 'center',
-        backgroundColor: '#fff',
         alignItems: 'center',
+        backgroundColor: 'transparent',
+        gap: 10,
     },
-    logo: {
-        fontSize: 32,
-        fontWeight: 'bold',
+    logoImage: {
+        width: 100,
+        height: 100,
         marginBottom: 10,
-        color: '#000',
+        borderRadius: 50,
+        resizeMode: 'contain',
     },
     subtitle: {
-        fontSize: 14,
-        color: '#666',
+        fontSize: 16,
+        color: '#444',
         marginBottom: 30,
         textAlign: 'center',
+        fontWeight: '600',
     },
     input: {
         width: '100%',
@@ -120,18 +133,16 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         marginBottom: 15,
         fontSize: 16,
-    },
-    logintext: {
-        color: '#00aaff',
-        fontSize: 16,
-        marginBottom: 20,
-
-
-
+        backgroundColor: '#fff',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 2,
     },
     signUpButton: {
         width: '100%',
-        backgroundColor: '#00aaff',
+        backgroundColor: '#ff6fa4',
         padding: 15,
         borderRadius: 30,
         alignItems: 'center',
@@ -141,6 +152,11 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 16,
+    },
+    loginText: {
+        color: '#ff6fa4',
+        fontSize: 16,
+        textAlign: 'center',
     },
 });
 

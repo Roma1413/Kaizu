@@ -1,30 +1,27 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
+    SafeAreaView,
     View,
     Text,
     TextInput,
     TouchableOpacity,
     StyleSheet,
-    SafeAreaView,
-    Image
-
-}
-from 'react-native';
+    Image,
+    Alert,
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useRouter } from 'expo-router';
-
 import * as WebBrowser from 'expo-web-browser';
 import { useAuth } from '@/contexts/AuthContext';
-WebBrowser.maybeCompleteAuthSession();
 
+WebBrowser.maybeCompleteAuthSession();
 
 const LoginScreen = () => {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { login } = useAuth();
-
-
 
     const handleLogin = async () => {
         try {
@@ -36,84 +33,94 @@ const LoginScreen = () => {
             const data = await res.json();
             if (res.ok) {
                 console.log('Login successful:', data);
-                login(data); // Store user data
-                router.push('/home'); // Navigate to home
+                login(data);
+                router.push('/home');
             } else {
-                alert(data.detail || 'Login failed');
+                Alert.alert('Login failed', data.detail || 'Invalid credentials');
             }
         } catch (error) {
             console.error(error);
-            alert('Error connecting to backend');
+            Alert.alert('Error', 'Could not connect to backend');
         }
     };
 
-
     return (
-        <SafeAreaView style={styles.container}>
-            <Image style={styles.logoImage} source={require('@/assets/images/app-image.png')} />
+        <LinearGradient colors={['#FFDEE9', '#B5FFFC']} style={styles.gradient}>
+            <SafeAreaView style={styles.container}>
+                <Image
+                    style={styles.logoImage}
+                    source={require('@/assets/images/app-image.png')}
+                />
 
+                <Text style={styles.subtitle}>“Better habits with better partners.”</Text>
 
-            <Text style={styles.subtitle}>“Better habits with better partners.”</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Email"
+                    placeholderTextColor="#888"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    placeholderTextColor="#888"
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Email"
-                placeholderTextColor="#888"
-                value={email}
-                onChangeText={setEmail}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                placeholderTextColor="#888"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-            />
-
-            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-                <Text style={styles.loginButtonText}>Login</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => router.push("/signup")}>
-                <Text style={styles.signUpText}>Sign Up</Text>
-            </TouchableOpacity>
-
-            <Text style={styles.orText}>Or continue with</Text>
-
-            <View style={styles.socialContainer}>
-                <TouchableOpacity style={styles.socialButton}>
-                    <Icon name="google" size={24} color="#DB4437" />
+                <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+                    <Text style={styles.loginButtonText}>Login</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.socialButton}>
-                    <Icon name="apple" size={24} color="#000" />
+                <TouchableOpacity onPress={() => router.push('/signup')}>
+                    <Text style={styles.signUpText}>Sign Up</Text>
                 </TouchableOpacity>
-            </View>
-        </SafeAreaView>
+
+                <Text style={styles.orText}>Or continue with</Text>
+
+                <View style={styles.socialContainer}>
+                    <TouchableOpacity style={styles.socialButton}>
+                        <Icon name="google" size={24} color="#DB4437" />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.socialButton}>
+                        <Icon name="apple" size={24} color="#000" />
+                    </TouchableOpacity>
+                </View>
+            </SafeAreaView>
+        </LinearGradient>
     );
 };
 
 const styles = StyleSheet.create({
+    gradient: {
+        flex: 1,
+    },
     container: {
         flex: 1,
         padding: 20,
         justifyContent: 'center',
-        backgroundColor: 'FF6FA4',
-
+        backgroundColor: 'transparent',
         alignItems: 'center',
+        gap: 10,
     },
-    logo: {
-        fontSize: 32,
-        fontWeight: 'bold',
+    logoImage: {
+        width: 100,
+        height: 100,
         marginBottom: 10,
-        color: '#000',
+        borderRadius: 50,
+        resizeMode: 'contain',
     },
     subtitle: {
-        fontSize: 14,
-        color: '#666',
+        fontSize: 16,
+        color: '#444',
         marginBottom: 30,
         textAlign: 'center',
+        fontWeight: '600',
     },
     input: {
         width: '100%',
@@ -124,10 +131,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         marginBottom: 15,
         fontSize: 16,
+        backgroundColor: '#fff',
     },
     loginButton: {
         width: '100%',
-        backgroundColor: '#00aaff',
+        backgroundColor: '#ff6fa4',
         padding: 15,
         borderRadius: 30,
         alignItems: 'center',
@@ -139,7 +147,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     signUpText: {
-        color: '#00aaff',
+        color: '#ff6fa4',
         fontSize: 16,
         marginBottom: 20,
     },
@@ -157,13 +165,13 @@ const styles = StyleSheet.create({
         padding: 12,
         borderRadius: 50,
         marginHorizontal: 10,
-    },
-    logoImage: {
-        width: 100,
-        height:100,
-        marginBottom: 10,
-        borderRadius: 50,
-        resizeMode: 'contain',
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 3,
     },
 });
 
