@@ -1,3 +1,3 @@
-import LoginScreen  from "@/components/LoginScreen";
+import SplashToLogin from '@/components/SplashToLogin';
 
-export default LoginScreen;
+export default SplashToLogin;
