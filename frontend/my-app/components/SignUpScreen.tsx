@@ -6,7 +6,6 @@ import {
     StyleSheet,
     SafeAreaView,
     Image,
-    Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -19,14 +18,45 @@ const SignUpScreen = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const [nameError, setNameError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [confirmPasswordError, setConfirmPasswordError] = useState('');
+
     const handleSignUp = async () => {
-        if (password !== confirmPassword) {
-            Alert.alert("Error", "Passwords do not match");
-            return;
+        let isValid = true;
+
+        setNameError('');
+        setEmailError('');
+        setPasswordError('');
+        setConfirmPasswordError('');
+
+        if (!name.trim()) {
+            setNameError('Name is required');
+            isValid = false;
         }
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setEmailError('Enter a valid email address');
+            isValid = false;
+        }
+
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(password)) {
+            setPasswordError('Password must be 8+ chars, with upper/lowercase, number, and special character');
+            isValid = false;
+        }
+
+        if (password !== confirmPassword) {
+            setConfirmPasswordError('Passwords do not match');
+            isValid = false;
+        }
+
+        if (!isValid) return;
+
         try {
-            const res = await fetch('http://192.168.1.3:8000/register', {
+            const res = await fetch('http://localhost:8000/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, email, password }),
@@ -36,11 +66,11 @@ const SignUpScreen = () => {
                 console.log('Sign up successful:', data);
                 router.push('/login');
             } else {
-                Alert.alert("Sign up failed", data.detail || 'Please try again');
+                setEmailError(data.detail || 'Sign up failed');
             }
         } catch (error) {
             console.error(error);
-            Alert.alert('Error', 'Could not connect to backend');
+            setEmailError('Could not connect to backend');
         }
     };
 
@@ -60,6 +90,8 @@ const SignUpScreen = () => {
                     value={name}
                     onChangeText={setName}
                 />
+                {nameError ? <Text style={styles.errorText}>{nameError}</Text> : null}
+
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
@@ -69,6 +101,8 @@ const SignUpScreen = () => {
                     autoCapitalize="none"
                     keyboardType="email-address"
                 />
+                {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+
                 <TextInput
                     style={styles.input}
                     placeholder="Password"
@@ -77,6 +111,8 @@ const SignUpScreen = () => {
                     value={password}
                     onChangeText={setPassword}
                 />
+                {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+
                 <TextInput
                     style={styles.input}
                     placeholder="Confirm Password"
@@ -85,6 +121,7 @@ const SignUpScreen = () => {
                     value={confirmPassword}
                     onChangeText={setConfirmPassword}
                 />
+                {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
 
                 <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
                     <Text style={styles.signUpButtonText}>Sign Up</Text>
@@ -131,7 +168,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#ccc',
         paddingHorizontal: 15,
-        marginBottom: 15,
+        marginBottom: 5,
         fontSize: 16,
         backgroundColor: '#fff',
         shadowColor: '#000',
@@ -139,6 +176,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 5,
         elevation: 2,
+    },
+    errorText: {
+        width: '100%',
+        color: 'red',
+        fontSize: 12,
+        marginBottom: 10,
+        paddingHorizontal: 5,
     },
     signUpButton: {
         width: '100%',

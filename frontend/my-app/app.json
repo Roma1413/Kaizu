@@ -5,14 +5,16 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "com.kaizu.myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.kaizu.myapp"
     },
-
+    "android": {
+      "package": "com.kaizu.myapp"
+    },
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -32,6 +34,11 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "209ada92-cb0c-4d1f-8006-fbe2a80a7a8e"
+      }
     }
   }
 }
